@@ -4,6 +4,7 @@ import Addresses from '../constants/Addresses';
 import ProgamBase64Codes from '../constants/ProgamBase64Codes';
 import { AccountAddress } from '../wallet/Accounts';
 import { LibraVMStatusError } from './Errors';
+import { writeBigUInt64LE }from '../common/ut';
 
 export interface LibraProgram {
   code: Uint8Array;
@@ -31,7 +32,7 @@ export interface LibraGasConstraint {
 export class LibraTransaction {
   public static createTransfer(recipientAddress: string, numAccount: BigNumber): LibraTransaction {
     const amountBuffer = Buffer.alloc(8);
-    amountBuffer.writeBigUInt64LE(BigInt(numAccount), 0);
+    writeBigUInt64LE(amountBuffer, BigInt(numAccount), 0);
     const programArguments: LibraProgramArgument[] = [
       {
         type: LibraProgramArgumentType.ADDRESS,

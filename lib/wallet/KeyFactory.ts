@@ -3,6 +3,7 @@ import { KeyPair } from '../crypto/Eddsa';
 import { Hkdf } from '../crypto/Hkdf';
 import { Pbkdf } from '../crypto/Pbkdf';
 import { Mnemonic } from './Mnemonic';
+import { writeBigUInt64LE }from '../common/ut';
 
 /**
  * Seed is used by KeyFactory to generate
@@ -50,7 +51,7 @@ export class KeyFactory {
    */
   public generateKey(childDepth: number): KeyPair {
     const childDepthBuffer = Buffer.alloc(8);
-    childDepthBuffer.writeBigUInt64LE(BigInt(childDepth));
+    writeBigUInt64LE(childDepthBuffer, BigInt(childDepth));
     const info = Buffer.concat([
       Uint8Array.from(Buffer.from(KeyPrefixes.DerivedKey)),
       Uint8Array.from(childDepthBuffer),
